@@ -21,9 +21,13 @@ if (isset($_GET['action'])) {
     {
         signin($bdd);
     }
+    elseif ($_GET['action'] == 'confirmation')
+    {
+        echo "bitoku";
+        verif_process($bdd);
+    }
 }
-
-
-require('affichageIndex.php');
+else
+    require('view/affichageIndex.php');
 
 ?>

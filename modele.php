@@ -19,24 +19,26 @@ if ($res_u->fetch() > 0) {
 }else if($res_e->fetch() > 0){
   $email_error = "Sorry... email already taken";
 }
+$verif_key = randomPassword();
+
 // Insertion
-$req = $bdd->prepare('INSERT INTO users(pseudo, pass, email) VALUES(:pseudo, :pass, :email)');
+$req = $bdd->prepare('INSERT INTO users(pseudo, pass, email, verif_key) VALUES(:pseudo, :pass, :email, :verif_key)');
 $req->execute(array(
     'pseudo' => $infos['pseudo'],
     'pass' => $pass_hache,
-    'email' => $infos['email']));
+    'email' => $infos['email'],
+    'verif_key' => $verif_key));
 
-    $key = 0;
-
+    
     $header="MIME-Version: 1.0\r\n";
-    $header.='From:"[VOUS]"<votremail@mail.com>'."\n";
+    $header.='From:"le trou du cul de ton pipi"<caca@42.fr>'."\n";
     $header.='Content-Type:text/html; charset="uft-8"'."\n";
     $header.='Content-Transfer-Encoding: 8bit';
     $message='
     <html>
         <body>
             <div align="center">
-                <a href="http://127.0.0.1/Tutos%20PHP/%2314%20%28Espace%20membre%29/confirmation.php?pseudo='.urlencode('zezette').'&key='.$key.'">Confirmez votre compte !</a>
+                <a href="http://localhost:8888/camagru/index.php?action=confirmation&pseudo='.urlencode($pseudo).'&key='.$verif_key.'">Confirmez votre compte ma gueule !</a>
             </div>
         </body>
     </html>
@@ -50,8 +52,60 @@ $req->execute(array(
     {
         echo("error while sending mail");
     }
+
+
+    
+$sender = 'arthur.gonthiersimpsons@gmail.com';
+$recipient = 'arthur.jouassain@live.fr';
+
+$subject = "php mail test";
+$message = "php test message";
+$headers = 'From:' . $sender;
+
+if (mail($recipient, $subject, $message, $headers))
+{
+    echo "Message accepted";
+}
+else
+{
+    echo "Error: Message not accepted";
 }
 
+
+
+}
+
+function randomPassword() {
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $pass = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass); //turn the array into a string
+}
+
+function verify_user($bdd)
+{
+    //echo "OUI";
+    $pseudo = $_GET['pseudo'];
+    $key = $_GET['key'];
+    $sql = "SELECT * FROM users WHERE pseudo = '$pseudo' AND verif_key = '$key'";
+    $res = $bdd->query($sql);
+    //echo "OUI";
+    if ($res->fetch() <= 0) {
+        $name_error = "Sorry... invalid confirmation code";
+        echo $name_error . "<br>";
+        print_r($res);
+      }else{
+        $email_error = "AWESOME MAN";
+        $sql_validate = "UPDATE users SET validated = 1 WHERE pseudo = '$pseudo'";
+        $res = $bdd->query($sql_validate);
+        echo $email_error;
+        $sql_valid = "";
+      }
+}
 
 function connectMember($infos, $bdd)
 {
@@ -61,7 +115,7 @@ function connectMember($infos, $bdd)
 
 
     $_SESSION['loggedin'] = true;
-    $_SESSION['username'] = $username; // $username coming from the form, such as $_POST['username']
+    $_SESSION['pseudo'] = $username; // $username coming from the form, such as $_POST['username']
                                            // something like this is optional, of course
         
     }

@@ -7,11 +7,18 @@
     </head>
         
     <body>
-    <?php
-    if($_SESSION['loggedin'] = true)
-        echo "hello" . $_SESSION['pseudo'];
-    ?>
-    <?= $header ?>
-        <?= $content ?>
+        <header>
+            <?php 
+            require('view/affichageHeader.php');
+            if(isset($_SESSION['pseudo']))
+                echo "hello " . $_SESSION['pseudo'];
+            ?>
+                <?= $header ?>
+        </header>
+        <main>
+            <?= $content ?>
+        <footer>
+        </footer>
+    </main>
     </body>
 </html>
