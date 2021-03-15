@@ -1,15 +1,30 @@
 <?php $title = 'Home'; ?>
 <?php ob_start(); ?>
 
-<?php if($_SESSION['loggedin'] == false): ?>
-<li><a href="index.php?action=signin" >Sign In</a></li>
-</br>
-<li><a href="index.php?action=signup" >Sign Up</a></li>
-<?php else:
-load_montage();
-?>
-<?php endif; ?>
-
+<table>
+                <tr>
+                    <td>
+                    "photo 1"
+                    </td>
+                    <td>
+                    "photo 2"
+                    </td>
+                    <td>
+                    "photo 3"
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    "photo 4"
+                    </td>
+                    <td>
+                    "photo 5"
+                    </td>
+                    <td>
+                    "photo 6"
+                    </td>
+                </tr>
+</table>
 
 <?php $content = ob_get_clean(); ?>
 <?php require('template.php'); ?>
